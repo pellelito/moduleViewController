@@ -40,29 +40,32 @@ public class ControllerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
-		
+		// sets the response type and adds tools for it
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
 		
+		//creates a new bean and sets username and password for validation
 		aBean bean=new aBean();
 		
 		bean.setName(name);
 		bean.setPassword(password);
 		request.setAttribute("bean", bean);
-		
+		// calls the validation
 		boolean status = bean.validate();
 		
 		if (status) {
+			//creats new cookie and set max lifetime three minutes
 			Cookie cookie = new Cookie(name, "true");
 			cookie.setMaxAge(180);
 			response.addCookie(cookie);
 			
-		
+			//if validation successful
 			RequestDispatcher rd=request.getRequestDispatcher("login-success.jsp");
 			rd.forward(request, response);
 		} else {
+			//if validation is unsuccessful
 			RequestDispatcher rd=request.getRequestDispatcher("login-error.jsp");
 			rd.forward(request, response);
 		}
